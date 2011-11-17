@@ -7,6 +7,9 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/*
+ * View(layout) customizada para a camera
+ */
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	Camera camera;

@@ -12,6 +12,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
+/*
+ * VIEW (LAYOUT) CUSTOMIZADO PARA O DESENHO DA LINHA
+ */
 public class LineView extends View {
 
 	//CLASS VARS//

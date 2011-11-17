@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
+/*
+ * THREAD RESPONSAVEL PELA FUNCIONALIDADE DO JOGO
+ */
 public class GameLoopThread extends Thread {
 	static final long FPS = 10;
 	private LineView lineView;
@@ -20,8 +22,7 @@ public class GameLoopThread extends Thread {
 	private Handler handler;
 	private double resultado;
 
-	// ArrayList<Float> resultados = new ArrayList<Float>();
-
+	
 	public GameLoopThread(LineView arg1, View arg2, Handler hand) {
 		lineView = arg1;
 		viewControl = arg2;
@@ -54,7 +55,6 @@ public class GameLoopThread extends Thread {
 			Log.d("Thread", "Loop'd");
 
 			// RESULTADOS
-			// resultados.add(lineView.getRotateDegrees());
 			resultados += Math.abs(lineView.getRotateDegrees());
 			resultcount++;
 
@@ -77,15 +77,6 @@ public class GameLoopThread extends Thread {
 					}
 				});
 			} else {
-
-				// if (resultado > 100) {
-				// intent.putExtra("Result", "0.00");
-				// context.getApplicationContext().startActivity(intent);
-				// } else {
-				// intent.putExtra("Result", decFor.format(100 - resultado));
-				// context.startActivity(intent);
-				// }
-
 				setRunning(false);
 			}
 
@@ -101,7 +92,6 @@ public class GameLoopThread extends Thread {
 		}
 		resultado = resultados / resultcount;
 		Log.d("ENDGAME", "Result: " + resultado);
-//		DecimalFormat decFor = new DecimalFormat("0.00");
 		handler.sendEmptyMessage(0);
 	}
 

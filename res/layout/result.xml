@@ -2,12 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" android:gravity="center" android:background="#C44">
+    android:orientation="vertical" android:gravity="center" android:background="@drawable/bg_holiday">
 
-    <TextView
-        android:id="@+id/textResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Result" android:textSize="40sp" android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical" android:gravity="center" android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:src="@drawable/accuracy" />
+
+        <TextView
+            android:id="@+id/textResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xx%"
+            android:textSize="80sp"
+            android:textStyle="bold" android:textColor="#ff4e00"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical" android:layout_weight=".5" android:gravity="bottom|center">
+
+        <Button
+            android:drawableLeft="@drawable/ic_cab"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Call a Cab" android:onClick="onClickCab" android:textSize="25sp" android:textStyle="bold" android:textColor="#555" android:layout_marginLeft="15dp" android:layout_marginRight="15dp" android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableLeft="@android:drawable/ic_menu_rotate"
+            android:onClick="onClickRetry"
+            android:text="Try Again"
+            android:textColor="#555"
+            android:textSize="25sp"
+            android:textStyle="bold" android:layout_marginBottom="15dp" android:layout_marginLeft="15dp" android:layout_marginRight="15dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>
