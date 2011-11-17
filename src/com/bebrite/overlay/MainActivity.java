@@ -1,116 +1,97 @@
 package com.bebrite.overlay;
 
-import java.io.IOException;
+import java.text.DecimalFormat;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
-import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class CameraOverlayTryActivity extends Activity implements SurfaceHolder.Callback, SensorEventListener {
+public class MainActivity extends Activity implements SensorEventListener {
 
-	Camera camera;
-	SurfaceView surfaceView;
-	SurfaceHolder surfaceHolder;
-	boolean previewing = false;
+
 	LayoutInflater controlInflater = null;
+	private GameLoopThread gameLoopThread;
+	Button startBut;
 
 	// Sensor vars
-	Float azimut;
-	LineView lineView;
-	View viewControl;
 	private SensorManager mSensorManager;
+	float[] mGeomagnetic;
 	Sensor accelerometer;
 	Sensor magnetometer;
+	LineView lineView;
 	float[] mGravity;
-	float[] mGeomagnetic;
+	View viewControl;
+	Float azimut;
+	TextView accur;
+	int accurac;
 
-	/** Called when the activity is first created. */
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.main);
+		setContentView(new CameraView(this));
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-		// CAMERA STUFF
 		getWindow().setFormat(PixelFormat.UNKNOWN);
-		surfaceView = (SurfaceView) findViewById(R.id.camerapreview);
-		surfaceHolder = surfaceView.getHolder();
-		surfaceHolder.addCallback(this);
-		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 		// SENSORS STUFF
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
+		controlInflater = LayoutInflater.from(getBaseContext());
 		// Linha!
+		// ### OS ENGENHEIROS DA GOOGLE NÃO RECOMENDAM COLOCAR 2 SURFACEVIEW NA
+		// MESMA TELA!
 		lineView = new LineView(this);
 		LayoutParams layoutParamsControl = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		this.addContentView(lineView, layoutParamsControl);
 
 		// VIEW CONTROL.
-		controlInflater = LayoutInflater.from(getBaseContext());
 		viewControl = controlInflater.inflate(R.layout.control, null);
 		this.addContentView(viewControl, layoutParamsControl);
-	}
+		accur = (TextView) findViewById(R.id.accur);
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		if (previewing) {
-			camera.stopPreview();
-			previewing = false;
-		}
+		gameLoopThread = new GameLoopThread(lineView,viewControl,handler);
 
-		if (camera != null) {
-			try {
-				camera.setPreviewDisplay(surfaceHolder);
-				camera.setDisplayOrientation(90);
-				camera.startPreview();
-				previewing = true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		camera = Camera.open();
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		camera.stopPreview();
-		camera.release();
-		camera = null;
-		previewing = false;
 	}
 
 	protected void onResume() {
 		super.onResume();
-		mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-		mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+		mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+		mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+
 	}
 
 	protected void onPause() {
 		super.onPause();
 		mSensorManager.unregisterListener(this);
+		
+		boolean retry = true;
+		gameLoopThread.setRunning(false);
+		while (retry) {
+			try {
+				gameLoopThread.join();
+				retry = false;
+			} catch (InterruptedException e) {
+			}
+		}
 	}
 
 	public void onSensorChanged(SensorEvent event) {
@@ -127,19 +108,46 @@ public class CameraOverlayTryActivity extends Activity implements SurfaceHolder.
 				SensorManager.getOrientation(R, orientation);
 				azimut = orientation[0]; // orientation contains: azimut, pitch
 				float degrees = -azimut * 360 / (2 * 3.14159f);
-				lineView.SetAzi(degrees);
+				gameLoopThread.setDegrees(degrees);
 			}
 		}
-		// lineView.invalidate();
 	}
 
+	//NAO IMPLEMENTEI NADA PORQUE ACCURACY PARECE SEMPRE SER 3....
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		TextView accur = (TextView) findViewById(R.id.accur);
-		accur.setText("Accuracy:" + accuracy);
-	}
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {	}
 
-	public void onClickReset(View v) {
-		lineView.ResetPos();
+	public void onClickStart(View v) {
+		//PRA SUMIR O BOTAO
+		startBut = (Button)findViewById(R.id.buttonStart);
+		startBut.getHandler().post(new Runnable() {
+		    public void run() {
+		        startBut.setVisibility(View.GONE);
+		    }
+		});		
+		//INICIA A THREAD
+		gameLoopThread.setRunning(true);
+		gameLoopThread.start();		
 	}
+	
+	private Handler handler = new Handler() {
+	    public void handleMessage(Message msg) {
+//			Intent intent = new Intent(MainActivity.this,ResultActivity.class);
+	    	double resultado = gameLoopThread.getResultado();
+			Intent intent = new Intent("com.bebrite.overlay.RESULT");
+			DecimalFormat decFor = new DecimalFormat("0.00");
+			if (resultado > 100) {
+				intent.putExtra("Result", "0.00");
+				startActivity(intent);
+			} else {
+				intent.putExtra("Result", decFor.format(100 - resultado));
+				startActivity(intent);
+			}
+			finish();
+			
+			
+	    }
+	};
+	
+	
 }

@@ -1,56 +1,56 @@
 package com.bebrite.overlay;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
 public class LineView extends View {
 
+	//CLASS VARS//
 	Paint paint2 = new Paint();
-	private Float azDegrees;
-	Float linediff;
+	Float startingAzimuth;
+	private Float rotateDegrees;
+
+
 	Rect r = new Rect(10, 10, 50, 50);
+	ArrayList<Double> movingAverage;
+
 
 	public LineView(Context context) {
 		super(context);
-
 		paint2.setColor(android.graphics.Color.WHITE);
 		paint2.setStyle(Style.STROKE);
 		paint2.setStrokeWidth(SetPx((float) 30.0));
 		paint2.setAntiAlias(true);
+		
+		//Moving Average
+		movingAverage = new ArrayList<Double>();
+		for(int i=0;i<20;i++){
+			movingAverage.add(0.00);			
+		}
 	}
-
-	public void SetAzi(Float azi) {
-		this.azDegrees = azi;
-	}
-
+	
+	
 	protected void onDraw(Canvas canvas) {
-
 		int width = getWidth();
 		int height = getHeight();
 		int centerx = width / 2;
 		int centery = height / 2;
-		if (azDegrees != null && linediff == null) {
-			linediff = azDegrees;
-		}
 		
-		if (azDegrees != null && linediff != null) {
-			canvas.rotate(azDegrees - linediff, centerx, centery);// rad*360/2pi
-		}
-		
+		if (rotateDegrees != null && startingAzimuth != null) {
+			canvas.rotate(rotateDegrees, centerx, centery);// rad*360/2pi
+			Log.d("DRAW","Degrees Rotated:"+(rotateDegrees));
+		}		
 		for (int y = -1000; y < height + 1000; y += 120) {
 			canvas.drawLine(centerx, y, centerx, y + 90, paint2);
-		}
-	}
-
-	public void ResetPos() {
-		if (azDegrees != null) {
-			linediff = azDegrees;
 		}
 	}
 
@@ -60,4 +60,25 @@ public class LineView extends View {
 		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
 	}
 
+	public void setRotation(Float azi) {
+			if (startingAzimuth == null) {
+				startingAzimuth = azi;
+			}
+			movingAverage.remove(0);
+			movingAverage.add((double) (azi - startingAzimuth));
+			double sum = 0;
+			StringBuffer values = new StringBuffer();
+			for (double valor : movingAverage) {
+				sum += valor;
+				values.append(valor + ",");
+			}
+			Log.d("Average", "Items: " + values);
+			rotateDegrees = (float) (sum / movingAverage.size());
+
+	}	
+	
+
+	public Float getRotateDegrees() {
+		return rotateDegrees;
+	}
 }

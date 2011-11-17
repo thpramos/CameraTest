@@ -24,8 +24,8 @@ public class GameView extends SurfaceView {
 	// QUANDO CRIEI UM SURFACEVIEW ACIMA TEM QUE CRIAR UM HOLDER!
 	public GameView(Context context) {
 		super(context);
-		gameLoopThread = new GameLoopThread(this);
-		holder = getHolder();
+		holder = this.getHolder();
+//		gameLoopThread = new GameLoopThread(null,null);
 
 		paint2.setColor(android.graphics.Color.WHITE);
 		paint2.setStyle(Style.STROKE);
