@@ -9,10 +9,11 @@ import android.widget.TextView;
  * THREAD RESPONSAVEL PELA FUNCIONALIDADE DO JOGO
  */
 public class GameLoopThread extends Thread {
+	private boolean running = false;
 	static final long FPS = 10;
+	
 	private LineView lineView;
 	private View viewControl;
-	private boolean running = false;
 	private Float degrees;
 	private long mStartTime = 0L;
 	TextView counter;
@@ -28,12 +29,10 @@ public class GameLoopThread extends Thread {
 		viewControl = arg2;
 		this.handler = hand;
 		counter = (TextView) viewControl.findViewById(R.id.counter);
-
 	}
 
 	public void setRunning(boolean run) {
 		running = run;
-
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class GameLoopThread extends Thread {
 			Log.d("Thread", "Loop'd");
 
 			// RESULTADOS
-			resultados += Math.abs(lineView.getRotateDegrees());
+			resultados += Math.pow(Math.abs(lineView.getRotateDegrees()),2);
 			resultcount++;
 
 			// CONTADOR

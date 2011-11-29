@@ -12,8 +12,8 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:src="@drawable/accuracy" />
+            android:layout_height="50dp"
+            android:src="@drawable/accuracy" android:layout_marginTop="10dp"/>
 
         <TextView
             android:id="@+id/textResult"
@@ -22,6 +22,20 @@
             android:text="xx%"
             android:textSize="80sp"
             android:textStyle="bold" android:textColor="#ff4e00"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" android:layout_margin="10dp" android:background="@android:drawable/alert_light_frame">
+
+            <TextView
+                android:id="@+id/resultText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="TextView" android:textColor="#FF4e00" android:gravity="center"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

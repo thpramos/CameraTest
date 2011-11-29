@@ -75,8 +75,8 @@ public class GameActivity extends Activity implements SensorEventListener {
 
 	protected void onResume() {
 		super.onResume();
-		mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-		mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+		mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+		mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
 
 	}
 
@@ -137,12 +137,13 @@ public class GameActivity extends Activity implements SensorEventListener {
 	    public void handleMessage(Message msg) {
 	    	double resultado = gameLoopThread.getResultado();
 			Intent intent = new Intent("com.bebrite.overlay.RESULT");
-			DecimalFormat decFor = new DecimalFormat("0.00");
+			DecimalFormat decFor = new DecimalFormat("0");
 			if (resultado > 100) {
-				intent.putExtra("Result", "0.00");
+				intent.putExtra("Result", "0");
 				startActivity(intent);
 			} else {
-				intent.putExtra("Result", decFor.format(100 - resultado));
+				intent.putExtra("Result", decFor.format(100 - Math.round(resultado)));
+				
 				startActivity(intent);
 			}
 			finish();

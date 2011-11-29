@@ -22,18 +22,22 @@ public final class R {
         public static final int bg_top=0x7f020008;
         public static final int dashed=0x7f020009;
         public static final int game_button=0x7f02000a;
-        public static final int ic_cab=0x7f02000b;
-        public static final int ic_launcher=0x7f02000c;
-        public static final int start_bg_nobt=0x7f02000d;
-        public static final int start_button=0x7f02000e;
-        public static final int start_button_bg=0x7f02000f;
-        public static final int start_button_bg_pressed=0x7f020010;
+        public static final int green_ball=0x7f02000b;
+        public static final int ic_cab=0x7f02000c;
+        public static final int ic_launcher=0x7f02000d;
+        public static final int logo=0x7f02000e;
+        public static final int start_bg_nobt=0x7f02000f;
+        public static final int start_blank_bg=0x7f020010;
+        public static final int start_button=0x7f020011;
+        public static final int start_button_bg=0x7f020012;
+        public static final int start_button_bg_pressed=0x7f020013;
     }
     public static final class id {
         public static final int TextView01=0x7f060006;
         public static final int buttonStart=0x7f06000a;
         public static final int camerapreview=0x7f06000b;
         public static final int counter=0x7f060008;
+        public static final int frameLayout1=0x7f06000c;
         public static final int imageView1=0x7f060003;
         public static final int imageView2=0x7f060000;
         public static final int linearLayout1=0x7f060001;
@@ -41,7 +45,8 @@ public final class R {
         public static final int linearLayout3=0x7f060004;
         public static final int linearLayout4=0x7f060002;
         public static final int linearLayout5=0x7f060009;
-        public static final int textResult=0x7f06000c;
+        public static final int resultText=0x7f06000e;
+        public static final int textResult=0x7f06000d;
         public static final int textView2=0x7f060007;
     }
     public static final class layout {
