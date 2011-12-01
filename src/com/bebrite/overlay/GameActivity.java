@@ -66,7 +66,7 @@ public class GameActivity extends Activity implements SensorEventListener {
 		this.addContentView(lineView, layoutParamsControl);
 
 		// ABAIXO CRIA A VIEW CONTROL.
-		viewControl = controlInflater.inflate(R.layout.control, null);
+		viewControl = controlInflater.inflate(R.layout.control2, null);
 		this.addContentView(viewControl, layoutParamsControl);
 
 		gameLoopThread = new GameLoopThread(lineView,viewControl,handler);
@@ -75,8 +75,8 @@ public class GameActivity extends Activity implements SensorEventListener {
 
 	protected void onResume() {
 		super.onResume();
-		mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-		mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+		mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+		mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
 
 	}
 

@@ -25,15 +25,21 @@ public final class R {
         public static final int green_ball=0x7f02000b;
         public static final int ic_cab=0x7f02000c;
         public static final int ic_launcher=0x7f02000d;
-        public static final int logo=0x7f02000e;
-        public static final int start_bg_nobt=0x7f02000f;
-        public static final int start_blank_bg=0x7f020010;
-        public static final int start_button=0x7f020011;
-        public static final int start_button_bg=0x7f020012;
-        public static final int start_button_bg_pressed=0x7f020013;
+        public static final int ic_menu_airplane=0x7f02000e;
+        public static final int ic_menu_pizza=0x7f02000f;
+        public static final int logo=0x7f020010;
+        public static final int start_bg_nobt=0x7f020011;
+        public static final int start_blank_bg=0x7f020012;
+        public static final int start_button=0x7f020013;
+        public static final int start_button_bg=0x7f020014;
+        public static final int start_button_bg_pressed=0x7f020015;
+        public static final int steps=0x7f020016;
     }
     public static final class id {
+        public static final int ButPIZZA=0x7f06000f;
+        public static final int ButPLANE=0x7f060010;
         public static final int TextView01=0x7f060006;
+        public static final int butCAB=0x7f060011;
         public static final int buttonStart=0x7f06000a;
         public static final int camerapreview=0x7f06000b;
         public static final int counter=0x7f060008;
@@ -51,10 +57,12 @@ public final class R {
     }
     public static final class layout {
         public static final int control=0x7f030000;
-        public static final int line=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int main_start=0x7f030003;
-        public static final int result=0x7f030004;
+        public static final int control2=0x7f030001;
+        public static final int line=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int main_start=0x7f030004;
+        public static final int result=0x7f030005;
+        public static final int tips=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

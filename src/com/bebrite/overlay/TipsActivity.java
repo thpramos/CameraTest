@@ -11,19 +11,19 @@ import android.view.WindowManager;
 /*
  * ATIVIDADE INICIAL
  */
-public class MainActivity extends Activity {
+public class TipsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.main_start);
+		setContentView(R.layout.tips);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 	}
 	
 	public void onClickGetStarted(View v){
-		startActivity(new Intent("com.bebrite.overlay.TIPS"));
+		startActivity(new Intent("android.intent.action.GAME"));
 		finish();
 	}
 
